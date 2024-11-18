@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  gather_facts: yes
+  tasks:
+    - name: shutdown Ubuntu only
+      ansible.builtin.command: /sbin/shutdown -t now
+      when: 
+        ansible_facts['distribution'] in ['Ubuntu', 'Debian', 'Redhat']
+

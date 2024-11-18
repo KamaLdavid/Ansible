@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: to create an ec2 instance with different AMIs
+      amazon.aws.ec2_instance:
+        name: "ansible-instance"
+        key_name: "ansible_key"  # Uncomment and set this if you are using an SSH key
+        # vpc_subnet_id: subnet-013744e41e8088axx  # Uncomment and set this if you want to specify a subnet
+        instance_type: t2.micro
+        security_groups:
+          - default
+        region: us-east-1
+        aws_access_key: "{{ ec2_access_key }}"  # From vault as defined
+        aws_secret_key: "{{ ec2_secret_key }}"  # From vault as defined
+        network:
+          assign_public_ip: true
+        image_id: "{{ item }}"  # Dynamically set the AMI ID from the loop
+      loop:
+        - "ami-012967cc5a8c9f891"
+        - "ami-0866a3c8686eaeeba"
+        - "ami-0866a3c8686eaeeba"
+
